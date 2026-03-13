@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../../styles/globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Enskoped Islam",
@@ -19,7 +19,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={cn("font-sans", geist.variable)}
+      suppressHydrationWarning
+    >
       <body>
         <ThemeProvider
           attribute="class"
@@ -27,10 +31,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar/>
-          <div className="pt-16">
-            {children}
-          </div>
+          <Navbar />
+          <div className="pt-16">{children}</div>
           <Footer />
         </ThemeProvider>
       </body>
