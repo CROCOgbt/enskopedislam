@@ -9,6 +9,7 @@ import {
   Phone
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 
 const footerLinks = {
@@ -16,26 +17,30 @@ const footerLinks = {
     { title: "Sejarah Islam", href: "/sejarah" },
     { title: "Tokoh Muslim", href: "/tokoh" },
     { title: "Ensiklopedia", href: "/ensiklopedia" },
+    { title: "Artikel", href: "/artikel" },
   ],
   informasi: [
     { title: "Tentang Kami", href: "/tentang" },
-    { title: "Pusat Bantuan", href: "/help" },
-    { title: "Kebijakan Privasi", href: "/privacy" },
+    { title: "Kontak Kami", href: "/kontak" },
   ],
 };
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-muted/20 pt-16 pb-8">
+    <footer id="kontak" className="border-t bg-muted/20 pt-16 pb-8">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         <div className="grid grid-cols-1 gap-y-12 lg:grid-cols-3 lg:gap-x-12">
           
           {/* Column 1: Brand & Social */}
           <div className="space-y-6 flex flex-col items-center text-center">
             <Link href="/" className="flex items-center space-x-2 justify-center">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-                <BookOpen className="h-6 w-6" />
-              </div>
+              <Image
+                src="/logo.jpg"
+                alt="Ensiklopedia Islam Logo"
+                width={40}
+                height={40}
+                className="rounded-xl shadow-sm"
+              />
               <span className="text-2xl font-bold tracking-tight text-primary">
                 Enskoped Islam
               </span>

@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Menu, Search, X } from "lucide-react";
+import { Menu, Search, History, Users, BookOpen, FileText, X } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,34 +16,40 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Input } from "@/components/ui/input";
 import { ModeToggle } from "@/components/mode-toggle";
+import { LanguageToggle } from "@/components/language-toggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-const components: { title: string; href: string }[] = [
+const components: { title: string; href: string; description: string; icon: any }[] = [
   {
     title: "Sejarah Islam",
     href: "/sejarah",
+    description: "Perjalanan peradaban Islam dari masa ke masa.",
+    icon: History,
   },
   {
     title: "Tokoh Muslim",
     href: "/tokoh",
+    description: "Pemikiran dan kontribusi tokoh besar Muslim.",
+    icon: Users,
   },
   {
     title: "Ensiklopedia",
     href: "/ensiklopedia",
+    description: "Kumpulan pengetahuan Islam yang komprehensif.",
+    icon: BookOpen,
   },
   {
     title: "Artikel",
     href: "/artikel",
+    description: "Baca artikel terbaru seputar dunia Islam.",
+    icon: FileText,
   },
 ];
 
 export default function Navbar() {
   const [isVisible, setIsVisible] = React.useState(true);
   const [prevScrollPos, setPrevScrollPos] = React.useState(0);
-  const [isSearchExpanded, setIsSearchExpanded] = React.useState(false); // untuk desktop
-  const [showMobileSearch, setShowMobileSearch] = React.useState(false); // untuk mobile
-  const searchRef = React.useRef<HTMLDivElement>(null);
-  const mobileSearchRef = React.useRef<HTMLDivElement>(null);
+  const [showMobileSearch, setShowMobileSearch] = React.useState(false);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -51,34 +58,14 @@ export default function Navbar() {
         setIsVisible(true);
       } else if (currentScrollPos > 100) {
         setIsVisible(false);
-        setIsSearchExpanded(false);
-        setShowMobileSearch(false); // sembunyikan search saat scroll
+        setShowMobileSearch(false);
       }
       setPrevScrollPos(currentScrollPos);
     };
 
-    const handleClickOutside = (event: MouseEvent) => {
-      // untuk desktop search
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setIsSearchExpanded(false);
-      }
-      // untuk mobile search
-      if (
-        mobileSearchRef.current &&
-        !mobileSearchRef.current.contains(event.target as Node)
-      ) {
-        setShowMobileSearch(false);
-      }
-    };
-
     window.addEventListener("scroll", handleScroll);
-    document.addEventListener("mousedown", handleClickOutside);
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [prevScrollPos]);
 
@@ -90,60 +77,32 @@ export default function Navbar() {
       )}
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
-        {/* Desktop: Logo + Menu */}
-        <div className="hidden items-center gap-6 lg:flex lg:gap-10">
+        {/* Desktop: Logo */}
+        <div className="hidden items-center lg:flex">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-              <span className="text-lg font-bold">E</span>
-            </div>
+            <Image
+              src="/logo.jpg"
+              alt="Ensiklopedia Islam Logo"
+              width={32}
+              height={32}
+              className="rounded-lg shadow-sm"
+            />
             <span className="text-xl font-bold tracking-tight text-primary">
               Ensiklopedia Islam
             </span>
           </Link>
+        </div>
 
-          <NavigationMenu>
-            <NavigationMenuList className="gap-1">
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  asChild
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    "hover:text-primary transition-colors",
-                  )}
-                >
-                  <Link href="/">Beranda</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="hover:text-primary transition-colors">
-                  Eksplorasi
-                </NavigationMenuTrigger>
-                <NavigationMenuContent className="mt-4">
-                  <ul className="flex w-48 flex-col gap-1 p-2">
-                    {components.map((component) => (
-                      <ListItem
-                        key={component.title}
-                        title={component.title}
-                        href={component.href}
-                        className="hover:bg-primary/10 hover:text-primary transition-all duration-200"
-                      />
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  asChild
-                  className={cn(
-                    navigationMenuTriggerStyle(),
-                    "hover:text-primary transition-colors",
-                  )}
-                >
-                  <Link href="/tentang">Tentang Kami</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+        {/* Desktop: Search Bar Center */}
+        <div className="hidden flex-1 items-center justify-center px-8 lg:flex">
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Cari artikel, tokoh, atau sejarah..."
+              className="h-10 w-full rounded-full border bg-muted/50 pl-10 pr-4 text-sm transition-all focus:bg-background focus:ring-1 focus:ring-emerald-500/20"
+            />
+          </div>
         </div>
 
         {/* Mobile: Hamburger, Title, Search Icon */}
@@ -170,9 +129,13 @@ export default function Navbar() {
                 <div className="relative z-10 flex flex-col h-full p-4">
                   {/* Header Sidebar */}
                   <div className="mb-6 flex items-center gap-2 border-b pb-4">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                      <span className="text-lg font-bold">E</span>
-                    </div>
+                    <Image
+                      src="/logo.jpg"
+                      alt="Ensiklopedia Islam Logo"
+                      width={32}
+                      height={32}
+                      className="rounded-lg shadow-sm"
+                    />
                     <span className="font-semibold text-primary">
                       Ensiklopedia Islam
                     </span>
@@ -194,8 +157,9 @@ export default function Navbar() {
                         <Link
                           key={item.title}
                           href={item.href}
-                          className="block rounded-md px-3 py-2 text-sm transition-colors hover:bg-primary/10 hover:text-primary"
+                          className="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-emerald-50 hover:text-emerald-700"
                         >
+                          <item.icon className="h-4 w-4 text-emerald-600" />
                           {item.title}
                         </Link>
                       ))}
@@ -204,12 +168,22 @@ export default function Navbar() {
                       href="/tentang"
                       className="block rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary"
                     >
-                      Tentang Kami
+                      Tentang
+                    </Link>
+                    <Link
+                      href="#kontak"
+                      className="block rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary"
+                    >
+                      Kontak
                     </Link>
                   </nav>
 
-                  {/* Dark Mode Toggle di Sidebar */}
-                  <div className="mt-auto border-t pt-4">
+                  {/* Dark Mode & Language Toggle di Sidebar */}
+                  <div className="mt-auto border-t pt-4 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Bahasa</span>
+                      <LanguageToggle />
+                    </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">Tema</span>
                       <ModeToggle />
@@ -221,83 +195,118 @@ export default function Navbar() {
           </Sheet>
 
           {/* Judul di tengah (mobile) */}
-          <Link
-            href="/"
-            className="text-lg font-bold tracking-tight text-primary"
-          >
-            Ensiklopedia Islam
-          </Link>
+          {!showMobileSearch && (
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-lg font-bold tracking-tight text-primary"
+            >
+              <Image
+                src="/logo.jpg"
+                alt="Ensiklopedia Islam Logo"
+                width={24}
+                height={24}
+                className="rounded-md"
+              />
+              Ensiklopedia Islam
+            </Link>
+          )}
 
-          {/* Ikon pencarian di kanan (mobile) - toggle search bar di bawah */}
-          <button
-            onClick={() => setShowMobileSearch(!showMobileSearch)}
-            className="flex h-9 w-9 items-center justify-center bold text-foreground transition-colors hover:bg-muted"
-            aria-label="Cari"
-          >
-            <Search className="h-6 w-6" />
-          </button>
+          {/* Inline Search (mobile) */}
+          {showMobileSearch && (
+            <div className="flex-1 px-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  autoFocus
+                  type="text"
+                  placeholder="Cari..."
+                  className="h-9 w-full rounded-full border bg-muted/50 pl-9 pr-8 text-sm focus:bg-background"
+                  onBlur={() => setShowMobileSearch(false)}
+                />
+                <button
+                  onClick={() => setShowMobileSearch(false)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Ikon pencarian di kanan (mobile) */}
+          {!showMobileSearch && (
+            <button
+              onClick={() => setShowMobileSearch(true)}
+              className="flex h-9 w-9 items-center justify-center bold text-foreground transition-colors hover:bg-muted"
+              aria-label="Cari"
+            >
+              <Search className="h-6 w-6" />
+            </button>
+          )}
         </div>
 
-        {/* Mobile Search Bar (muncul di bawah navbar) */}
-        {showMobileSearch && (
-          <div
-            ref={mobileSearchRef}
-            className="absolute top-full left-0 w-full px-4 pt-2 pb-4 bg-transparent lg:hidden"
-          >
-            <div className="relative mx-auto max-w-xl">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-
-              <Input
-                type="text"
-                placeholder="Cari artikel..."
-                className="w-full bg-background  border pl-10 pr-10 h-11 rounded-sm  focus:border-primary focus:ring-1 focus:ring-primary"
-              />
-
-              <button
-                onClick={() => setShowMobileSearch(false)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Tutup pencarian"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+        {/* Desktop: Navigation Menu */}
+        <div className="hidden items-center justify-end lg:flex">
+          <NavigationMenu>
+            <NavigationMenuList className="gap-1">
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "hover:text-primary transition-colors",
+                  )}
+                >
+                  <Link href="/">Beranda</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="hover:text-primary transition-colors">
+                  Eksplorasi
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="mt-4">
+                  <ul className="grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150">
+                    {components.map((component) => (
+                      <ListItem
+                        key={component.title}
+                        title={component.title}
+                        href={component.href}
+                        icon={component.icon}
+                      >
+                        {component.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "hover:text-primary transition-colors",
+                  )}
+                >
+                  <Link href="/tentang">Tentang</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "hover:text-primary transition-colors",
+                  )}
+                >
+                  <Link href="#kontak">Kontak</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+          <div className="ml-4 flex items-center gap-2 border-l pl-4">
+            <LanguageToggle />
+            <ModeToggle />
           </div>
-        )}
-
-        {/* Desktop: Search + ModeToggle */}
-        <div className="hidden items-center justify-end gap-4 lg:flex">
-          <div
-            ref={searchRef}
-            className={cn(
-              "relative flex items-center transition-all duration-300 ease-in-out",
-              isSearchExpanded ? "w-64 md:w-80" : "w-9",
-            )}
-          >
-            <button
-              onClick={() => setIsSearchExpanded(!isSearchExpanded)}
-              className={cn(
-                "absolute left-0 z-10 flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-muted",
-                isSearchExpanded
-                  ? "text-muted-foreground"
-                  : "text-foreground border",
-              )}
-            >
-              <Search className="h-4 w-4" />
-            </button>
-            <Input
-              type="search"
-              placeholder="Cari..."
-              className={cn(
-                "h-9 w-full rounded-full bg-muted/50 transition-all duration-300 focus:bg-background focus:ring-primary",
-                isSearchExpanded
-                  ? "pl-10 pr-4 opacity-100 visible"
-                  : "pl-0 pr-0 opacity-0 invisible",
-              )}
-              autoFocus={isSearchExpanded}
-            />
-          </div>
-
-          <ModeToggle />
         </div>
       </div>
     </header>
@@ -306,20 +315,33 @@ export default function Navbar() {
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, href, ...props }) => {
+  React.ComponentPropsWithoutRef<"a"> & { title: string; icon?: any }
+>(({ className, title, children, icon: Icon, href, ...props }, ref) => {
   return (
     <li>
       <NavigationMenuLink asChild>
         <Link
+          ref={ref}
           href={href || "#"}
           className={cn(
-            "block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "block select-none rounded-lg p-3 leading-none no-underline outline-none transition-all hover:bg-emerald-50 hover:text-emerald-700 focus:bg-emerald-50 focus:text-emerald-700",
             className,
           )}
           {...props}
         >
-          <div className="text-sm font-semibold leading-none">{title}</div>
+          <div className="flex items-start gap-3">
+            {Icon && (
+              <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-emerald-100/50 text-emerald-600">
+                <Icon className="h-5 w-5" />
+              </div>
+            )}
+            <div className="space-y-1">
+              <div className="text-sm font-bold leading-none">{title}</div>
+              <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                {children}
+              </p>
+            </div>
+          </div>
         </Link>
       </NavigationMenuLink>
     </li>

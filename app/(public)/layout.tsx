@@ -7,6 +7,9 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 export const metadata: Metadata = {
   title: "Enskoped Islam",
   description: "Enskoped Islam website",
+  icons: {
+    icon: "/logo.jpg",
+  },
 };
 
 import Navbar from "@/components/navbar";
