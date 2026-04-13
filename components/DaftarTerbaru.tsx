@@ -1,4 +1,4 @@
-import FeatureCard from "@/components/card";
+import FeatureCard from "@/components/Card";
 
 export default function DaftarTerbaru() {
   const features = [

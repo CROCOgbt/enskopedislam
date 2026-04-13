@@ -13,9 +13,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/NavigationMenu";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/Input";
 import { ModeToggle } from "@/components/ModeToggle";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/Sheet";
 
 const components: { title: string; href: string }[] = [
   {

@@ -1,4 +1,4 @@
-import DaftarPopuler from "@/components/Card";
+import FeatureCard from "@/components/Card";
 
 export default function DaftarPopuler() {
   const features = [
@@ -27,7 +27,7 @@ export default function DaftarPopuler() {
       </h2>
       <div className="grid md:grid-cols-3 gap-8">
         {features.map((feature, i) => (
-          <DaftarPopuler
+          <FeatureCard
             key={i}
             title={feature.title}
             description={feature.description}

@@ -9,7 +9,7 @@ import {
   Phone
 } from "lucide-react";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/ui/Separator";
 
 const footerLinks = {
   eksplorasi: [
