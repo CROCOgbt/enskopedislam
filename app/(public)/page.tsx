@@ -1,6 +1,6 @@
-import HeroSection from "@/components/hero-section";
-import DaftarPopuler from "@/components/daftar-populer";
-import DaftarTerbaru from "@/components/daftar-terbaru";
+import HeroSection from "@/components/HeroSection";
+import DaftarPopuler from "@/components/DaftarPopuler";
+import DaftarTerbaru from "@/components/DaftarTerbaru";
 
 
 
