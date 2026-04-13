@@ -6,13 +6,12 @@ import { cn } from "@/lib/utils";
 import { Menu, Search, X } from "lucide-react";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/NavigationMenu";
+import DropdownMenu from "@/components/ui/DropdownMenu";
 import { Input } from "@/components/ui/Input";
 import { ModeToggle } from "@/components/ModeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/Sheet";
@@ -114,23 +113,20 @@ export default function Navbar() {
                   <Link href="/">Beranda</Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="hover:text-primary transition-colors">
-                  Eksplorasi
-                </NavigationMenuTrigger>
-                <NavigationMenuContent className="mt-4">
-                  <ul className="flex w-48 flex-col gap-1 p-2">
-                    {components.map((component) => (
-                      <ListItem
-                        key={component.title}
-                        title={component.title}
-                        href={component.href}
-                        className="hover:bg-primary/10 hover:text-primary transition-all duration-200"
-                      />
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+              <DropdownMenu
+                triggerLabel="Eksplorasi"
+                contentClassName="mt-2"
+              >
+                <ul className="flex w-56 flex-col gap-0 py-1 px-1">
+                  {components.map((component) => (
+                    <ListItem
+                      key={component.title}
+                      title={component.title}
+                      href={component.href}
+                    />
+                  ))}
+                </ul>
+              </DropdownMenu>
               <NavigationMenuItem>
                 <NavigationMenuLink
                   asChild
@@ -307,19 +303,20 @@ export default function Navbar() {
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
->(({ className, title, href, ...props }) => {
+>(({ className, title, href, ...props }, ref) => {
   return (
     <li>
       <NavigationMenuLink asChild>
         <Link
+          ref={ref}
           href={href || "#"}
           className={cn(
-            "block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "block select-none rounded-md px-4 py-2.5 text-sm font-medium leading-none no-underline outline-none transition-all duration-200 text-foreground/80 hover:text-foreground hover:bg-secondary/40 focus:text-foreground focus:bg-secondary/50 focus-visible:ring-2 focus-visible:ring-secondary/60 focus-visible:outline-1",
             className,
           )}
           {...props}
         >
-          <div className="text-sm font-semibold leading-none">{title}</div>
+          <div>{title}</div>
         </Link>
       </NavigationMenuLink>
     </li>

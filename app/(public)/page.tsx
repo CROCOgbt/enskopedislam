@@ -1,8 +1,10 @@
 import HeroSection from "@/components/HeroSection";
+import ArtikelSection from "@/components/ArtikelSection";
+import HighlightSection from "@/components/HighlightSection";
+import ImageGallerySection from "@/components/ImageGallerySection";
+import TestimonialSection from "@/components/TestimonialSection";
 import DaftarPopuler from "@/components/DaftarPopuler";
 import DaftarTerbaru from "@/components/DaftarTerbaru";
-
-
 
 export default function Home() {
   return (
@@ -10,6 +12,10 @@ export default function Home() {
       <HeroSection />
       <DaftarPopuler />
       <DaftarTerbaru />
+      <ArtikelSection />
+      <HighlightSection />
+      <ImageGallerySection />
+      <TestimonialSection />
     </main>
   );
 }
