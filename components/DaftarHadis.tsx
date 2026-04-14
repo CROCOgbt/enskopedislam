@@ -1,6 +1,6 @@
-import FeatureCard from "@/components/card";
+import FeatureCard from "@/components/Card";
 
-export default function FeaturesSection() {
+export default function DaftarPopuler() {
   const features = [
     {
       title: "kajian mbah gupron",
@@ -21,9 +21,9 @@ export default function FeaturesSection() {
   ];
 
   return (
-    <div id="populer" className="px-6 py-16 max-w-6xl mx-auto text-left">
+    <div id="terbaru" className="px-6 py-16 max-w-6xl mx-auto text-left">
       <h2 className="text-3xl font-bold text-slate-900 mb-12">
-        Daftar populer
+        Daftar Populer
       </h2>
       <div className="grid md:grid-cols-3 gap-8">
         {features.map((feature, i) => (
